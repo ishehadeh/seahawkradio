@@ -20,6 +20,8 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
+    implementation group: 'io.javalin', name: 'javalin', version: '4.6.4'
+
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.0.1-jre'
 }
