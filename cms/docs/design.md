@@ -10,6 +10,10 @@
 
 ## Technology Stack Overview & Reasoning
 
+### Java
+
+It's a well known, battle-tested language taught in introductory CS classes.
+
 ### Web Framework: Javalin
 
 The web framework will only be used to serve a few templates, and handle forms.
