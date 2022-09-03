@@ -4,12 +4,19 @@
 package seahawkradio.cms;
 
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 
 public class App {
+    private final static Logger LOG = LoggerFactory.getLogger(App.class);
+
     public String getGreeting() {
         return "Hello World!";
     }
@@ -21,17 +28,34 @@ public class App {
     }
 
     public static void main(String[] args) {
-        Logger logger = LoggerFactory.getLogger(App.class);
-        logger.info("Hello World");
+        final String databaseURL = "jdbc:sqlite:seahawkradio-cms.db";
 
-        Javalin app = Javalin.create(config -> config.addStaticFiles("static", Location.CLASSPATH)).start(8080);
+        LOG.info("initializing Seahawk Radio CSM");
+        Javalin app = Javalin.create(config -> config.addStaticFiles("static", Location.CLASSPATH));
+
+        try {
+            LOG.info("opening database connection '{}'", databaseURL);
+
+            // AFAIK there's no reason to pool SQLite connections.
+            // They're also threadsafe so we can just create one for the lifetime of this
+            // application
+            final Connection conn = DriverManager.getConnection("jdbc:sqlite:seahawkradio-cms.db");
+            app.attribute("database", conn);
+        } catch (SQLException e) {
+            LOG.error("failed to open database '{}'", databaseURL, e);
+            System.exit(1);
+        }
+
         app.get("/", ctx -> ctx.render("index.jte"));
         app.post("/login", ctx -> {
             // TODO validate form params
             int maxAge = 60 * 60 * 24 * 7; // 1 week in seconds
-            String session = LoginHandler.getSessionToken(ctx.formParam("username"), ctx.formParam("password"));
+
+            String session = LoginHandler.getSessionToken(ctx.formParam("username"),
+                    ctx.formParam("password"));
             ctx.cookie("session", session, maxAge);
             ctx.redirect("/");
         });
+        app.start(8080);
     }
 }
