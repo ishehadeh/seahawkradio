@@ -3,6 +3,9 @@
  */
 package seahawkradio.cms;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 
@@ -12,6 +15,9 @@ public class App {
     }
 
     public static void main(String[] args) {
+        Logger logger = LoggerFactory.getLogger(App.class);
+        logger.info("Hello World");
+
         Javalin app = Javalin.create(config -> config.addStaticFiles("static", Location.CLASSPATH)).start(8080);
         app.get("/", ctx -> ctx.render("index.jte"));
     }
