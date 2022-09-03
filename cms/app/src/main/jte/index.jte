@@ -24,7 +24,14 @@
         <time></time>
     </header>
 
-    <main></main>
+    <main>
+        <h2>Login</h2>
+        <form method="post" action="/login">
+            <input type="text" id="username" placeholder="username" />
+            <input type="text" id="password" placeholder="password" />
+            <input type="submit" value="submit" />
+        </form>
+    </main>
 
     <footer></footer>
 </body>

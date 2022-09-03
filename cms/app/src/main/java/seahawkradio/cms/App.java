@@ -14,11 +14,24 @@ public class App {
         return "Hello World!";
     }
 
+    public static class LoginHandler {
+        public static String getSessionToken(String username, String password) {
+            return "session";
+        }
+    }
+
     public static void main(String[] args) {
         Logger logger = LoggerFactory.getLogger(App.class);
         logger.info("Hello World");
 
         Javalin app = Javalin.create(config -> config.addStaticFiles("static", Location.CLASSPATH)).start(8080);
         app.get("/", ctx -> ctx.render("index.jte"));
+        app.post("/login", ctx -> {
+            // TODO validate form params
+            int maxAge = 60 * 60 * 24 * 7; // 1 week in seconds
+            String session = LoginHandler.getSessionToken(ctx.formParam("username"), ctx.formParam("password"));
+            ctx.cookie("session", session, maxAge);
+            ctx.redirect("/");
+        });
     }
 }
