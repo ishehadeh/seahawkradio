@@ -1,4 +1,4 @@
-# seahawkradio.<TBD>
+# seahawkradio.TBD
 
 Seahawk Radio website.
 
