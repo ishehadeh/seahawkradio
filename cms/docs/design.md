@@ -5,7 +5,7 @@
 1. Users with permissions - students must be able to edit their own projects, and only their projects
 2. WYSIWYG content editing - project pages should be easily editable by anyone
 3. Media storage - studentants can upload recorded audio and images for branding
-4. RSS Feeds - Podcast RSS feeds are generated for recorded audio, so its easily accessible 
+4. RSS Feeds - Podcast RSS feeds are generated for recorded audio, so its easily accessible
 
 
 ## Technology Stack Overview & Reasoning
@@ -18,6 +18,11 @@ It's a well known, battle-tested language taught in introductory CS classes.
 
 The web framework will only be used to serve a few templates, and handle forms.
 The main alternative would be Spring Boot, which seems overly complex for this use case.
+
+### Templating Engine: JTE
+
+Honestly, its just what I found when looking for something that integrated with Javalin.
+Project seems active though, and it can pre-compile templates which is great.
 
 ### Media Storage: S3-like Object Store
 

@@ -4,6 +4,7 @@
 package seahawkradio.cms;
 
 import io.javalin.Javalin;
+import io.javalin.http.staticfiles.Location;
 
 public class App {
     public String getGreeting() {
@@ -11,7 +12,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        Javalin app = Javalin.create().start(8080);
-        app.get("/", ctx -> ctx.result("Hello World"));
+        Javalin app = Javalin.create(config -> config.addStaticFiles("static", Location.CLASSPATH)).start(8080);
+        app.get("/", ctx -> ctx.render("index.jte"));
     }
 }

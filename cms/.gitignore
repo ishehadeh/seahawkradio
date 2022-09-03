@@ -6,3 +6,4 @@ build
 
 # Ignore files generated from source
 *.class
+app/jte-classes

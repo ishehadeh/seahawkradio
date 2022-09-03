@@ -20,7 +20,11 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
+    // Web Framework
     implementation group: 'io.javalin', name: 'javalin', version: '4.6.4'
+
+    // Template Engine
+    implementation group: 'gg.jte', name: 'jte', version: '2.1.2'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.0.1-jre'
