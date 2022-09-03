@@ -1,0 +1,14 @@
+# Editor Settings
+
+## Vscode
+.vscode
+
+## Eclipse
+.classpath
+.project
+.settings/
+
+## Intellij
+.idea/
+*.iml
+*.iws
