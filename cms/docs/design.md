@@ -14,3 +14,8 @@
 
 The web framework will only be used to serve a fairly small REST API for the frontend, along with a few RSS feeds.
 The main alternative would be Spring Boot, which seems overly complex for this use case.
+
+
+### Content Editor: tinyMCE or CKEditor 5, or QuillJS
+
+All of these seem like pretty good options, but I really need to prototype them to see which is best for this purpose.
