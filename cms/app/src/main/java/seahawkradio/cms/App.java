@@ -21,17 +21,17 @@ public class App {
         return "Hello World!";
     }
 
-    public static class LoginHandler {
-        public static String getSessionToken(String username, String password) {
-            return "session";
-        }
-    }
-
     public static void main(String[] args) {
         final String databaseURL = "jdbc:sqlite:seahawkradio-cms.db";
 
         LOG.info("initializing Seahawk Radio CSM");
-        Javalin app = Javalin.create(config -> config.addStaticFiles("static", Location.CLASSPATH));
+
+        // Supress resource not closed lint
+        // it isn't necessary to explicitly call close on Javalin apps.
+        @SuppressWarnings("java:S2095")
+        Javalin app = Javalin.create(config -> {
+            config.addStaticFiles("static", Location.CLASSPATH);
+        });
 
         try {
             LOG.info("opening database connection '{}'", databaseURL);
@@ -47,15 +47,7 @@ public class App {
         }
 
         app.get("/", ctx -> ctx.render("index.jte"));
-        app.post("/login", ctx -> {
-            // TODO validate form params
-            int maxAge = 60 * 60 * 24 * 7; // 1 week in seconds
-
-            String session = LoginHandler.getSessionToken(ctx.formParam("username"),
-                    ctx.formParam("password"));
-            ctx.cookie("session", session, maxAge);
-            ctx.redirect("/");
-        });
+        app.post("/login", UserController.login);
         app.start(8080);
     }
 }
