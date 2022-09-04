@@ -4,11 +4,11 @@
 package seahawkradio.cms;
 
 import org.slf4j.LoggerFactory;
-
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import org.slf4j.Logger;
 
 import io.javalin.Javalin;
@@ -16,6 +16,7 @@ import io.javalin.http.staticfiles.Location;
 
 public class App {
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
+
 
     public String getGreeting() {
         return "Hello World!";
@@ -26,6 +27,16 @@ public class App {
 
         LOG.info("initializing Seahawk Radio CSM");
 
+        String schema = null;
+        LOG.info("opening database schema resource");
+        try (var schemaFile = App.class.getResource("/sql/schema.sql").openStream()) {
+            // TODO instead of a single schema we should apply a series of migrations
+            schema = new String(schemaFile.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            LOG.error("failed to read SQL schema", e);
+            System.exit(1);
+        }
+
         // Supress resource not closed lint
         // it isn't necessary to explicitly call close on Javalin apps.
         @SuppressWarnings("java:S2095")
@@ -33,19 +44,29 @@ public class App {
             config.addStaticFiles("static", Location.CLASSPATH);
         });
 
+        Connection databaseConnection = null;
         try {
             LOG.info("opening database connection '{}'", databaseURL);
 
             // AFAIK there's no reason to pool SQLite connections.
             // They're also threadsafe so we can just create one for the lifetime of this
             // application
-            final Connection conn = DriverManager.getConnection("jdbc:sqlite:seahawkradio-cms.db");
-            app.attribute("database", conn);
+            databaseConnection = DriverManager.getConnection("jdbc:sqlite:seahawkradio-cms.db");
         } catch (SQLException e) {
             LOG.error("failed to open database '{}'", databaseURL, e);
             System.exit(1);
         }
 
+        LOG.info("applying database schema");
+        try (var stmt = databaseConnection.createStatement()) {
+            stmt.addBatch(schema);
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            LOG.error("failed to apply schema", e);
+            System.exit(1);
+        }
+
+        app.attribute("database", databaseConnection);
         app.get("/", ctx -> ctx.render("index.jte"));
         app.post("/login", UserController.login);
         app.start(8080);

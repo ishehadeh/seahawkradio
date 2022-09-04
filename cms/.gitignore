@@ -7,6 +7,7 @@ build
 # Ignore files generated from source
 *.class
 app/jte-classes
+app/bin
 
 # Application Database
 seahawkradio-cms.db
