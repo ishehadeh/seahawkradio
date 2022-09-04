@@ -15,7 +15,7 @@ import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 
 public class App {
-    private final static Logger LOG = LoggerFactory.getLogger(App.class);
+    private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
     public String getGreeting() {
         return "Hello World!";
