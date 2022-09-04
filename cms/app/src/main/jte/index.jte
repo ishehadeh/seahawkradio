@@ -27,8 +27,8 @@
     <main>
         <h2>Login</h2>
         <form method="post" action="/login">
-            <input type="text" id="username" placeholder="username" />
-            <input type="text" id="password" placeholder="password" />
+            <input type="text" name="username" placeholder="username" />
+            <input type="text" name="password" placeholder="password" />
             <input type="submit" value="submit" />
         </form>
     </main>
