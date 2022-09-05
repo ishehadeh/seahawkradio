@@ -66,6 +66,12 @@ public class App {
             System.exit(1);
         }
 
+        try {
+            new UserDao(databaseConnection).create("admin", "admin@example.com", "password123");
+        } catch (SQLException e) {
+            LOG.error("failed to create admin user", e);
+            System.exit(1);
+        }
         app.attribute("database", databaseConnection);
         app.get("/", ctx -> ctx.render("index.jte"));
         app.post("/login", UserController.login);
