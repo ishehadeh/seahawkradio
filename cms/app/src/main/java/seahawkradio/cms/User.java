@@ -16,4 +16,29 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    @Override
+    public int hashCode() {
+        // really not sure if this is a good way to override hashCode
+        // in theory it could just be id I guess
+        return (id.toString() + username + email + password).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object otherObj) {
+        if (!(otherObj instanceof User)) {
+            return false;
+        }
+
+        User other = (User) otherObj;
+        return this.id.equals(other.id) && this.username.contentEquals(other.username)
+                && this.email.contentEquals(other.email)
+                && this.password.contentEquals(other.password);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("User(id=\"%s\", username=\"%s\", email=\"%s\", password=\"%s\")", id,
+                username, email, password);
+    }
 }

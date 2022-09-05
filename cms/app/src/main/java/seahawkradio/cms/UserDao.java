@@ -2,6 +2,7 @@ package seahawkradio.cms;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +19,12 @@ public class UserDao {
 
     UserDao(Connection conn) {
         this.conn = conn;
+    }
+
+    // Get User from a query result row. Row must be id, username, email, password
+    protected static User userFromRow(ResultSet row) throws SQLException {
+        return new User(UUID.fromString(row.getString(1)), row.getString(2), row.getString(3),
+                row.getString(4));
     }
 
     User create(String username, String email, String password) throws SQLException {
@@ -48,15 +55,13 @@ public class UserDao {
                 LOG.info("no user with email '{}'", email);
                 return Optional.empty();
             }
-            var id = UUID.fromString(rows.getString(1));
-            var username = rows.getString(2);
-            var hashedPassword = rows.getString(4);
-            if (!argon2.verify(hashedPassword, utf8Password)) {
+            User user = userFromRow(rows);
+            if (!argon2.verify(user.password, utf8Password)) {
                 LOG.info("password did not match for '{}'", email);
                 return Optional.empty();
             }
 
-            return Optional.of(new User(id, username, email, hashedPassword));
+            return Optional.of(user);
         }
     }
 
