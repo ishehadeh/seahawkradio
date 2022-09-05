@@ -35,9 +35,6 @@ dependencies {
     // Password Hashing
     // argon2-jvm packages Argon2 binaries, to disable this use argon2-jvm-nolibs
     implementation 'de.mkammerer:argon2-jvm:2.11'
-
-    // This dependency is used by the application.
-    implementation 'com.google.guava:guava:31.0.1-jre'
 }
 
 application {
