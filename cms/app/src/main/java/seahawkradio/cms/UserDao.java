@@ -21,25 +21,34 @@ public class UserDao {
         this.conn = conn;
     }
 
-    // Get User from a query result row. Row must be id, username, email, password
+    // Get User from a query result row. Row must be id, username, email, email_normalized, password
     protected static User userFromRow(ResultSet row) throws SQLException {
         return new User(UUID.fromString(row.getString(1)), row.getString(2), row.getString(3),
-                row.getString(4));
+                row.getString(4), row.getString(5));
+    }
+
+    // Convert an email address to its canonical form.
+    // useful when email addresses need to be compared.
+    // e.g. JohnDoe@example.com -> johndoe@example.com
+    protected static String normalizeEmail(String email) {
+        // in the future this could apply other transformations, like stripping comments.
+        return email.toLowerCase();
     }
 
     User create(String username, String email, String password) throws SQLException {
-        // TODO normalize email
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
         final String hashedPassword = argon2.hash(22, 65536, 1, utf8Password);
-        User user = new User(UUID.randomUUID(), username, email, hashedPassword);
+        User user =
+                new User(UUID.randomUUID(), username, email, normalizeEmail(email), hashedPassword);
 
         final String update =
-                "INSERT INTO USERS (id, username, email, password) VALUES (?, ?, ?, ?)";
+                "INSERT INTO USERS (id, username, email, email_normalized, password) VALUES (?, ?, ?, ?, ?)";
         try (var statement = this.conn.prepareStatement(update)) {
             statement.setString(1, user.id.toString());
             statement.setString(2, user.username);
             statement.setString(3, user.email);
-            statement.setString(4, user.password);
+            statement.setString(4, user.emailNormalized);
+            statement.setString(5, user.password);
             statement.executeUpdate();
         }
         return user;
@@ -47,9 +56,10 @@ public class UserDao {
 
     Optional<User> login(String email, String password) throws SQLException {
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
-        final String query = "SELECT id, username, email, password FROM users WHERE email = ?";
+        final String query =
+                "SELECT id, username, email, email_normalized, password FROM users WHERE email_normalized = ?";
         try (var statement = this.conn.prepareStatement(query)) {
-            statement.setString(1, email);
+            statement.setString(1, normalizeEmail(email));
             var rows = statement.executeQuery();
             if (!rows.next()) {
                 LOG.info("no user with email '{}'", email);
