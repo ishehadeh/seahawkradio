@@ -52,13 +52,13 @@ public class UserDao {
         final String update =
                 "INSERT INTO USERS (id, username, email, email_normalized, password, created, updated) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (var statement = this.conn.prepareStatement(update)) {
-            statement.setString(1, user.id.toString());
-            statement.setString(2, user.username);
-            statement.setString(3, user.email);
-            statement.setString(4, user.emailNormalized);
-            statement.setString(5, user.password);
-            statement.setString(6, user.created.format(DateTimeFormatter.ISO_DATE_TIME));
-            statement.setString(7, user.updated.format(DateTimeFormatter.ISO_DATE_TIME));
+            statement.setString(1, user.id().toString());
+            statement.setString(2, user.username());
+            statement.setString(3, user.email());
+            statement.setString(4, user.emailNormalized());
+            statement.setString(5, user.password());
+            statement.setString(6, user.created().format(DateTimeFormatter.ISO_DATE_TIME));
+            statement.setString(7, user.updated().format(DateTimeFormatter.ISO_DATE_TIME));
             statement.executeUpdate();
         }
         return user;
@@ -76,7 +76,7 @@ public class UserDao {
                 return Optional.empty();
             }
             User user = userFromRow(rows);
-            if (!argon2.verify(user.password, utf8Password)) {
+            if (!argon2.verify(user.password(), utf8Password)) {
                 LOG.info("password did not match for '{}'", email);
                 return Optional.empty();
             }

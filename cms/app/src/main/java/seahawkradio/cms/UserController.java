@@ -25,7 +25,7 @@ public class UserController {
 
         Optional<User> user = userAccessor.login(username, password);
         if (user.isPresent()) {
-            String session = user.get().username;
+            String session = user.get().username();
             ctx.cookie("session", session, maxAge);
             ctx.redirect("/");
         } else {
