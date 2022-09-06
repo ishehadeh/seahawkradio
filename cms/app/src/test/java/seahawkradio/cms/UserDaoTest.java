@@ -32,7 +32,8 @@ public class UserDaoTest {
         var user2 = users.create("test2", "test2@example.com", "password2");
         var user3 = users.create("test3", "test3@example.com", "password3");
 
-        final String query = "SELECT id, username, email, email_normalized, password FROM users";
+        final String query =
+                "SELECT id, username, email, email_normalized, password, created, updated, deleted FROM users";
         try (var statement = db.prepareStatement(query)) {
             var rows = statement.executeQuery();
             assertTrue(rows.next());
