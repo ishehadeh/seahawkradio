@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
-import java.util.Optional;
 
 public class UserDaoTest {
 
