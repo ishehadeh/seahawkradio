@@ -27,7 +27,7 @@ public class User {
     public int hashCode() {
         // really not sure if this is a good way to override hashCode
         // in theory it could just be id I guess
-        return (id.toString() + username + email + password).hashCode();
+        return (id.toString() + username + email + emailNormalized + password).hashCode();
     }
 
     @Override
@@ -39,12 +39,14 @@ public class User {
         User other = (User) otherObj;
         return this.id.equals(other.id) && this.username.contentEquals(other.username)
                 && this.email.contentEquals(other.email)
+                && this.emailNormalized.contentEquals(other.emailNormalized)
                 && this.password.contentEquals(other.password);
     }
 
     @Override
     public String toString() {
-        return String.format("User(id=\"%s\", username=\"%s\", email=\"%s\", password=\"%s\")", id,
-                username, email, password);
+        return String.format(
+                "User(id=\"%s\", username=\"%s\", email=\"%s\", emailNormalized=\"%s\", password=\"%s\")",
+                id, username, email, emailNormalized, password);
     }
 }
