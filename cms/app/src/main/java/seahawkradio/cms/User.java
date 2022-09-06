@@ -5,7 +5,11 @@ import java.util.UUID;
 public class User {
     public final UUID id;
     public final String username;
+
+    // The user's email as it was entered on registration
     public final String email;
+
+    // The user's email converted to lowercase
     public final String emailNormalized;
 
     // base64-encoded hashed password
