@@ -4,9 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -27,11 +26,9 @@ public class UserDao {
     // Get User from a query result row. Row must be id, username, email, email_normalized, password
     protected static User userFromRow(ResultSet row) throws SQLException {
         return new User(UUID.fromString(row.getString(1)), row.getString(2), row.getString(3),
-                row.getString(4), row.getString(5),
-                ZonedDateTime.parse(row.getString(6), DateTimeFormatter.ISO_DATE_TIME),
-                ZonedDateTime.parse(row.getString(7), DateTimeFormatter.ISO_DATE_TIME),
-                Optional.ofNullable(row.getString(8))
-                        .map(x -> ZonedDateTime.parse(x, DateTimeFormatter.ISO_DATE_TIME)));
+                row.getString(4), row.getString(5), OffsetDateTime.parse(row.getString(6)),
+                OffsetDateTime.parse(row.getString(7)),
+                Optional.ofNullable(row.getString(8)).map(OffsetDateTime::parse));
     }
 
     // Convert an email address to its canonical form.
@@ -45,7 +42,7 @@ public class UserDao {
     User create(String username, String email, String password) throws SQLException {
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
         final String hashedPassword = argon2.hash(22, 65536, 1, utf8Password);
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+        final OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         User user = new User(UUID.randomUUID(), username, email, normalizeEmail(email),
                 hashedPassword, now, now, Optional.empty());
 
@@ -57,8 +54,8 @@ public class UserDao {
             statement.setString(3, user.email());
             statement.setString(4, user.emailNormalized());
             statement.setString(5, user.password());
-            statement.setString(6, user.created().format(DateTimeFormatter.ISO_DATE_TIME));
-            statement.setString(7, user.updated().format(DateTimeFormatter.ISO_DATE_TIME));
+            statement.setString(6, user.created().toString());
+            statement.setString(7, user.updated().toString());
             statement.executeUpdate();
         }
         return user;
