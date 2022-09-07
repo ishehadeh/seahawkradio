@@ -59,8 +59,9 @@ public class App {
 
         LOG.info("applying database schema");
         try (var stmt = databaseConnection.createStatement()) {
-            stmt.addBatch(schema);
-            stmt.executeBatch();
+            for (var stmtStr : schema.split(";")) {
+                stmt.executeUpdate(stmtStr);
+            }
         } catch (SQLException e) {
             LOG.error("failed to apply schema", e);
             System.exit(1);

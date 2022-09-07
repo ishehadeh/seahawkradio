@@ -1,0 +1,24 @@
+package seahawkradio.cms;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.Duration;
+import org.junit.jupiter.api.Test;
+
+public class SessionDaoTest {
+    @Test
+    void createSession() throws IOException, SQLException {
+        var db = DbUtil.openDatabase();
+        var users = new UserDao(db);
+        var sessions = new SessionDao(db);
+        var user = users.create("sessionTest", "sessionTest@example.com", "password123");
+        var session = sessions.create(user, Duration.ofDays(7));
+        final String query = "SELECT id, user_id, created, expires FROM sessions";
+        try (var statement = db.prepareStatement(query)) {
+            var rows = statement.executeQuery();
+            assertTrue(rows.next());
+            assertEquals(SessionDao.sessionFromRow(rows), session);
+        }
+    }
+}
