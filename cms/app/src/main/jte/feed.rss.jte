@@ -11,9 +11,7 @@
         <copyright>${podcast.copyright()}</copyright>
         <pubDate>${podcast.pubDate().format(DateTimeFormatter.RFC_1123_DATE_TIME)}</pubDate>
         <author>${podcast.author()}</author>
-        @if (podcast.explicit())
-        <itunes:explicit />
-        @endif
+        <itunes:explicit>${podcast.explicit() ? "yes" : "no"}</itunes:explicit>
         <itunes:owner>
             <itunes:email>${podcast.owner().email()}</itunes:email>
             <itunes:name>${podcast.owner().name()}</itunes:name>
