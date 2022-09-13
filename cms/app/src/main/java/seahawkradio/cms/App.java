@@ -9,6 +9,9 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
+import java.util.Map;
+import java.util.UUID;
 import org.slf4j.Logger;
 
 import io.javalin.Javalin;
@@ -23,7 +26,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        final String databaseURL = "jdbc:sqlite:seahawkradio-cms.db";
+        final String databaseURL = "jdbc:sqlite:";
 
         LOG.info("initializing Seahawk Radio CSM");
 
@@ -51,7 +54,7 @@ public class App {
             // AFAIK there's no reason to pool SQLite connections.
             // They're also threadsafe so we can just create one for the lifetime of this
             // application
-            databaseConnection = DriverManager.getConnection("jdbc:sqlite:seahawkradio-cms.db");
+            databaseConnection = DriverManager.getConnection(databaseURL);
         } catch (SQLException e) {
             LOG.error("failed to open database '{}'", databaseURL, e);
             System.exit(1);
@@ -73,8 +76,13 @@ public class App {
             LOG.error("failed to create admin user", e);
             System.exit(1);
         }
+        final PodcastMetadata podcast = new PodcastMetadata(UUID.randomUUID(), "Test",
+                "http://localhost:8080/test", "Test podcast feed.", "Example Copyright",
+                ZonedDateTime.now(), "en-us", false);
         app.attribute("database", databaseConnection);
         app.get("/", ctx -> ctx.render("index.jte"));
+        app.get("/test.rss", ctx -> ctx.render("feed.rss.jte", Map.of("podcast", podcast))
+                .contentType("application/rss+xml"));
         app.post("/login", UserController.login);
         app.start(8080);
     }
