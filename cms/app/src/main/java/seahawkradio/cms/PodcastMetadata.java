@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public record PodcastMetadata(UUID id, String title, String link, String description,
         String copyright, ZonedDateTime pubDate, String language, boolean explicit,
-        Set<String> itunesCategories, String author, Optional<Identity> owner) {
+        Set<String> itunesCategories, String author, Identity owner) {
 
 }

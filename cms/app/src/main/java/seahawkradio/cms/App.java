@@ -81,7 +81,7 @@ public class App {
         final PodcastMetadata podcast = new PodcastMetadata(UUID.randomUUID(), "Test",
                 "http://localhost:8080/test", "Test podcast feed.", "Example Copyright",
                 ZonedDateTime.now(), "en-us", false, Set.of("Film Reviews", "Fantasy Sports"),
-                "Seahawk Radio", Optional.of(new Identity("admin@example.com", "The Admin")));
+                "Seahawk Radio", new Identity("admin@example.com", "The Admin"));
         app.attribute("database", databaseConnection);
         app.get("/", ctx -> ctx.render("index.jte"));
         app.get("/test.rss", ctx -> ctx.render("feed.rss.jte", Map.of("podcast", podcast))

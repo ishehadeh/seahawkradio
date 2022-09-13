@@ -14,12 +14,10 @@
         @if (podcast.explicit())
         <itunes:explicit />
         @endif
-        @if (podcast.owner().isPresent())
         <itunes:owner>
-            <itunes:email>${podcast.owner().get().email()}</itunes:email>
-            <itunes:name>${podcast.owner().get().name()}</itunes:name>
+            <itunes:email>${podcast.owner().email()}</itunes:email>
+            <itunes:name>${podcast.owner().name()}</itunes:name>
         </itunes:owner>
-        @endif
         @for (var category : podcast.itunesCategories())
         <itunes:category text="${category}" />
         @endfor
