@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,5 +41,19 @@ public class SessionDao {
         }
 
         return session;
+    }
+
+    public Optional<Session> get(UUID sessionId) throws SQLException {
+        final String query =
+                "SELECT id, user_id, created, expires FROM sessions WHERE datetime(expires) > datetime('now') AND id = ?";
+        try (var statement = this.conn.prepareStatement(query)) {
+            statement.setString(1, sessionId.toString());
+            final var row = statement.executeQuery();
+            if (!row.next()) {
+                return Optional.empty();
+            } else {
+                return Optional.of(sessionFromRow(row));
+            }
+        }
     }
 }
