@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
+import seahawkradio.cms.PodcastEpisode.Enclosure;
 
 public class App {
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
@@ -82,10 +84,15 @@ public class App {
                 "http://localhost:8080/test", "Test podcast feed.", "Example Copyright",
                 ZonedDateTime.now(), "en-us", false, Set.of("Film Reviews", "Fantasy Sports"),
                 "Seahawk Radio", new Identity("admin@example.com", "The Admin"));
+        final PodcastEpisode[] eps = new PodcastEpisode[] {new PodcastEpisode(UUID.randomUUID(),
+                "Test Ep 1", "This is a test episode", Duration.ofMinutes(10),
+                new Enclosure("http://example.com/example.mp3", "audio/mpeg", 498537), true,
+                ZonedDateTime.now())};
         app.attribute("database", databaseConnection);
         app.get("/", ctx -> ctx.render("index.jte"));
-        app.get("/test.rss", ctx -> ctx.render("feed.rss.jte", Map.of("podcast", podcast))
-                .contentType("application/rss+xml"));
+        app.get("/test.rss",
+                ctx -> ctx.render("feed.rss.jte", Map.of("podcast", podcast, "episodes", eps))
+                        .contentType("application/rss+xml"));
         app.post("/login", UserController.login);
         app.start(8080);
     }

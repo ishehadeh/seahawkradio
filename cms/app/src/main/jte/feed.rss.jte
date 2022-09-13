@@ -1,6 +1,8 @@
 @import java.time.format.DateTimeFormatter
 @import seahawkradio.cms.PodcastMetadata
+@import seahawkradio.cms.PodcastEpisode
 @param PodcastMetadata podcast
+@param PodcastEpisode[] episodes
 
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -18,6 +20,20 @@
         </itunes:owner>
         @for (var category : podcast.itunesCategories())
         <itunes:category text="${category}" />
+        @endfor
+
+        @for (var ep : episodes)
+        <item>
+            <guid>${ep.id().toString()}</guid>
+            <title>${ep.title()}</title>
+            <description>${ep.description()}</description>
+            <pubDate>${ep.pubDate().format(DateTimeFormatter.RFC_1123_DATE_TIME)}</pubDate>
+            <enclosure url="${ep.enclosure().url()}" type="${ep.enclosure().type()}" length="${ep.enclosure().length()}" />
+            <itunes:duration>${ep.duration().getSeconds()}</itunes:duration>
+            @if (ep.explicit() != podcast.explicit())
+            <itunes:explicit>${ep.explicit() ? "yes" : "no"}</itunes:explicit>
+            @endif
+        </item>
         @endfor
     </channel>
 </rss>
