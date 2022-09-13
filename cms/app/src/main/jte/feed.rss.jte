@@ -13,5 +13,8 @@
         @if (podcast.explicit())
         <itunes:explicit />
         @endif
+        @for (var category : podcast.itunesCategories())
+        <itunes:category text="${category}" />
+        @endfor
     </channel>
 </rss>
