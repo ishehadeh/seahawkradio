@@ -10,8 +10,15 @@
         <language>${podcast.language()}</language>
         <copyright>${podcast.copyright()}</copyright>
         <pubDate>${podcast.pubDate().format(DateTimeFormatter.RFC_1123_DATE_TIME)}</pubDate>
+        <author>${podcast.author()}</author>
         @if (podcast.explicit())
         <itunes:explicit />
+        @endif
+        @if (podcast.owner().isPresent())
+        <itunes:owner>
+            <itunes:email>${podcast.owner().get().email()}</itunes:email>
+            <itunes:name>${podcast.owner().get().name()}</itunes:name>
+        </itunes:owner>
         @endif
         @for (var category : podcast.itunesCategories())
         <itunes:category text="${category}" />
