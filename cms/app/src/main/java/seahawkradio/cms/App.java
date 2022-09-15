@@ -94,6 +94,7 @@ public class App {
                 ctx -> ctx.render("feed.rss.jte", Map.of("podcast", podcast, "episodes", eps))
                         .contentType("application/rss+xml"));
         app.post("/login", UserController.login);
+        app.post("/upload-image", UploadController.uploadImage);
         app.start(8080);
     }
 }

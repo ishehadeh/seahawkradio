@@ -31,6 +31,12 @@
             <input type="text" name="password" placeholder="password" />
             <input type="submit" value="submit" />
         </form>
+
+        <h2>Upload Image</h2>
+        <form method="post" action="/upload-image" enctype="multipart/form-data">
+            <input type="file" name="image" multiple />
+            <input type="submit" value="submit" />
+        </form>
     </main>
 
     <footer></footer>

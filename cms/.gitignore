@@ -10,4 +10,5 @@ app/jte-classes
 app/bin
 
 # Application Database
-seahawkradio-cms.db
+app/seahawkradio-cms.db
+app/uploads
