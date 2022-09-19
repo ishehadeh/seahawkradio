@@ -14,6 +14,7 @@ public class UploadController {
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);
     private static FileStore STORE = new FileStore(Path.of("./uploads"));
     public static final Handler uploadImage = ctx -> {
+        final var media = new MediaDao(ctx.appAttribute("database"));
 
         var file = ctx.uploadedFile("image");
         if (file == null) {
@@ -37,7 +38,9 @@ public class UploadController {
         reader.setInput(ImageIO.createImageInputStream(new ByteArrayInputStream(imgContent)), true,
                 true);
         var img = reader.read(0); // why 0?
-        var key = STORE.put(UUID.randomUUID().toString(), new ByteArrayInputStream(imgContent));
+
+        final var mediaRecord = media.create(file.getFilename(), contentType);
+        var key = STORE.put(mediaRecord.id().toString(), new ByteArrayInputStream(imgContent));
         LOG.atInfo().setMessage("uploaded image").addKeyValue("key", key).log();
         ctx.status(200).result("success");
         return;

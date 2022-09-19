@@ -17,3 +17,11 @@ CREATE TABLE IF NOT EXISTS sessions (
 
   FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS media (
+    id TEXT PRIMARY KEY,
+    filename TEXT NOT NULL,
+    content_type TEXT NOT NULL,
+    created TEXT NOT NULL,
+    deleted TEXT
+);
