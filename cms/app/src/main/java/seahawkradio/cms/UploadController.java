@@ -1,14 +1,11 @@
 package seahawkradio.cms;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
 import io.javalin.http.Handler;
 import java.nio.file.Path;
-import java.util.UUID;
 
 public class UploadController {
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);

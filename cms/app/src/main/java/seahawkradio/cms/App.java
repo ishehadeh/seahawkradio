@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
