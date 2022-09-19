@@ -63,7 +63,7 @@ public class UserDao {
 
         final String update =
                 "INSERT INTO USERS (id, username, email, email_normalized, password, created,"
-                    + " updated) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        + " updated) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (var statement = this.conn.prepareStatement(update)) {
             statement.setString(1, user.id().toString());
             statement.setString(2, user.username());
@@ -81,7 +81,7 @@ public class UserDao {
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
         final String query =
                 "SELECT id, username, email, email_normalized, password, created, updated, deleted"
-                    + " FROM users WHERE email_normalized = ?";
+                        + " FROM users WHERE email_normalized = ?";
         try (var statement = this.conn.prepareStatement(query)) {
             statement.setString(1, normalizeEmail(email));
             var rows = statement.executeQuery();

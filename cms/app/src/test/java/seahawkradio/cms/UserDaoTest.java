@@ -19,7 +19,7 @@ public class UserDaoTest {
 
         final String query =
                 "SELECT id, username, email, email_normalized, password, created, updated, deleted"
-                    + " FROM users";
+                        + " FROM users";
         try (var statement = db.prepareStatement(query)) {
             var rows = statement.executeQuery();
             assertTrue(rows.next());
