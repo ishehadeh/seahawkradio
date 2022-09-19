@@ -10,6 +10,9 @@ import java.nio.file.Path;
 public class UploadController {
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);
     private static FileStore STORE = new FileStore(Path.of("./uploads"));
+
+    private UploadController() {}
+
     public static final Handler uploadImage = ctx -> {
         final var media = new MediaDao(ctx.appAttribute("database"));
 
