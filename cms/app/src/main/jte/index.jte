@@ -37,6 +37,12 @@
             <input type="file" name="image" multiple />
             <input type="submit" value="submit" />
         </form>
+
+        <h2>Upload Audio</h2>
+        <form method="post" action="/upload-audio" enctype="multipart/form-data">
+            <input type="file" name="audio" multiple />
+            <input type="submit" value="submit" />
+        </form>
     </main>
 
     <footer></footer>

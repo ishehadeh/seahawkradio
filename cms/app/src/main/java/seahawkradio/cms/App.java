@@ -115,6 +115,7 @@ public class App {
                                 .contentType("application/rss+xml"));
         app.post("/login", UserController.login);
         app.post("/upload-image", UploadController.uploadImage);
+        app.post("/upload-audio", UploadController.uploadAudio);
         app.start(8080);
     }
 }
