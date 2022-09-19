@@ -1,10 +1,12 @@
 package seahawkradio.cms;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;
-import org.junit.jupiter.api.Test;
 
 public class SessionDaoTest {
     @Test

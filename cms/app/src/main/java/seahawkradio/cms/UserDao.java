@@ -1,5 +1,11 @@
 package seahawkradio.cms;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -8,10 +14,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 
 public class UserDao {
     private static final Logger LOG = LoggerFactory.getLogger(UserDao.class);
@@ -25,8 +27,13 @@ public class UserDao {
 
     // Get User from a query result row. Row must be id, username, email, email_normalized, password
     protected static User userFromRow(ResultSet row) throws SQLException {
-        return new User(UUID.fromString(row.getString(1)), row.getString(2), row.getString(3),
-                row.getString(4), row.getString(5), OffsetDateTime.parse(row.getString(6)),
+        return new User(
+                UUID.fromString(row.getString(1)),
+                row.getString(2),
+                row.getString(3),
+                row.getString(4),
+                row.getString(5),
+                OffsetDateTime.parse(row.getString(6)),
                 OffsetDateTime.parse(row.getString(7)),
                 Optional.ofNullable(row.getString(8)).map(OffsetDateTime::parse));
     }
@@ -43,11 +50,20 @@ public class UserDao {
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
         final String hashedPassword = argon2.hash(22, 65536, 1, utf8Password);
         final OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        User user = new User(UUID.randomUUID(), username, email, normalizeEmail(email),
-                hashedPassword, now, now, Optional.empty());
+        User user =
+                new User(
+                        UUID.randomUUID(),
+                        username,
+                        email,
+                        normalizeEmail(email),
+                        hashedPassword,
+                        now,
+                        now,
+                        Optional.empty());
 
         final String update =
-                "INSERT INTO USERS (id, username, email, email_normalized, password, created, updated) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "INSERT INTO USERS (id, username, email, email_normalized, password, created,"
+                    + " updated) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (var statement = this.conn.prepareStatement(update)) {
             statement.setString(1, user.id().toString());
             statement.setString(2, user.username());
@@ -64,7 +80,8 @@ public class UserDao {
     Optional<User> login(String email, String password) throws SQLException {
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
         final String query =
-                "SELECT id, username, email, email_normalized, password, created, updated, deleted FROM users WHERE email_normalized = ?";
+                "SELECT id, username, email, email_normalized, password, created, updated, deleted"
+                    + " FROM users WHERE email_normalized = ?";
         try (var statement = this.conn.prepareStatement(query)) {
             statement.setString(1, normalizeEmail(email));
             var rows = statement.executeQuery();
@@ -81,6 +98,4 @@ public class UserDao {
             return Optional.of(user);
         }
     }
-
-
 }

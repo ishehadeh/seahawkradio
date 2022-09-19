@@ -1,5 +1,8 @@
 package seahawkradio.cms;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +11,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SessionDao {
     private static final Logger LOG = LoggerFactory.getLogger(SessionDao.class);
@@ -22,8 +23,11 @@ public class SessionDao {
 
     // Get Session from a query result row. Row must be id, user_id, created, expires
     protected static Session sessionFromRow(ResultSet row) throws SQLException {
-        return new Session(UUID.fromString(row.getString(1)), UUID.fromString(row.getString(2)),
-                OffsetDateTime.parse(row.getString(3)), OffsetDateTime.parse(row.getString(4)));
+        return new Session(
+                UUID.fromString(row.getString(1)),
+                UUID.fromString(row.getString(2)),
+                OffsetDateTime.parse(row.getString(3)),
+                OffsetDateTime.parse(row.getString(4)));
     }
 
     public Session create(User user, Duration duration) throws SQLException {
@@ -45,7 +49,8 @@ public class SessionDao {
 
     public Optional<Session> get(UUID sessionId) throws SQLException {
         final String query =
-                "SELECT id, user_id, created, expires FROM sessions WHERE datetime(expires) > datetime('now') AND id = ?";
+                "SELECT id, user_id, created, expires FROM sessions WHERE datetime(expires) >"
+                        + " datetime('now') AND id = ?";
         try (var statement = this.conn.prepareStatement(query)) {
             statement.setString(1, sessionId.toString());
             final var row = statement.executeQuery();

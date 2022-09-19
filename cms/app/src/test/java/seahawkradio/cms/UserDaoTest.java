@@ -1,9 +1,11 @@
 package seahawkradio.cms;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.sql.SQLException;
-import org.junit.jupiter.api.Test;
 
 public class UserDaoTest {
 
@@ -16,7 +18,8 @@ public class UserDaoTest {
         var user3 = users.create("test3", "test3@example.com", "password3");
 
         final String query =
-                "SELECT id, username, email, email_normalized, password, created, updated, deleted FROM users";
+                "SELECT id, username, email, email_normalized, password, created, updated, deleted"
+                    + " FROM users";
         try (var statement = db.prepareStatement(query)) {
             var rows = statement.executeQuery();
             assertTrue(rows.next());
