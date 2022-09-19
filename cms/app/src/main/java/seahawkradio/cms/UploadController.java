@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import io.javalin.http.Handler;
 import java.nio.file.Path;
+import java.util.UUID;
 
 public class UploadController {
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);
@@ -36,7 +37,7 @@ public class UploadController {
         reader.setInput(ImageIO.createImageInputStream(new ByteArrayInputStream(imgContent)), true,
                 true);
         var img = reader.read(0); // why 0?
-        var key = STORE.put(imgContent);
+        var key = STORE.put(UUID.randomUUID().toString(), new ByteArrayInputStream(imgContent));
         LOG.atInfo().setMessage("uploaded image").addKeyValue("key", key).log();
         ctx.status(200).result("success");
         return;
