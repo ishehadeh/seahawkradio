@@ -25,3 +25,35 @@ CREATE TABLE IF NOT EXISTS media (
     created TEXT NOT NULL,
     deleted TEXT
 );
+
+CREATE TABLE IF NOT EXISTS category (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+);
+
+CREATE TABLE IF NOT EXISTS podcast (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    link TEXT NOT NULL,
+    description TEXT NOT NULL,
+    copyright TEXT NOT NULL,
+    pub_date TEXT NOT NULL,
+    language TEXT NOT NULL,
+    explicit INTEGER NOT NULL,
+    author TEXT NOT NULL,
+    owner_name TEXT,
+    owner_email TEXT,
+    created TEXT NOT NULL,
+    updated TEXT NOT NULL,
+    deleted TEXT
+);
+
+CREATE TABLE IF NOT EXISTS podcast_category (
+    podcast_id TEXT NOT NULL,
+    category_id INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS podcast_editors (
+    podcast_id TEXT NOT NULL,
+    user_id TEXT NOT NULL
+)
