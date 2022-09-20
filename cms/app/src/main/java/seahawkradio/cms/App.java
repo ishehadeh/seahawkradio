@@ -18,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -102,7 +103,11 @@ public class App {
                             "Test Ep 1",
                             "This is a test episode",
                             Duration.ofMinutes(10),
-                            new Enclosure("http://example.com/example.mp3", "audio/mpeg", 498537),
+                            List.of(
+                                    new Enclosure(
+                                            "http://example.com/example.mp3",
+                                            "audio/mpeg",
+                                            498537)),
                             true,
                             ZonedDateTime.now())
                 };

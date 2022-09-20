@@ -28,7 +28,9 @@
             <title>${ep.title()}</title>
             <description>${ep.description()}</description>
             <pubDate>${ep.pubDate().format(DateTimeFormatter.RFC_1123_DATE_TIME)}</pubDate>
-            <enclosure url="${ep.enclosure().url()}" type="${ep.enclosure().type()}" length="${ep.enclosure().length()}" />
+            @for (var enc : ep.enclosures())
+            <enclosure url="${enc.url()}" type="${enc.type()}" length="${enc.length()}" />
+            @endfor
             <itunes:duration>${ep.duration().getSeconds()}</itunes:duration>
             @if (ep.explicit() != podcast.explicit())
             <itunes:explicit>${ep.explicit() ? "yes" : "no"}</itunes:explicit>
