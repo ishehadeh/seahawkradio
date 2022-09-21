@@ -51,4 +51,26 @@ CREATE TABLE IF NOT EXISTS podcast_category (
 CREATE TABLE IF NOT EXISTS podcast_editors (
     podcast_id TEXT NOT NULL,
     user_id TEXT NOT NULL
-)
+);
+
+CREATE TABLE IF NOT EXISTS podcast_episodes (
+    id TEXT PRIMARY KEY,
+    podcast_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    explicit INTEGER NOT NULL,
+    pub_date TEXT NOT NULL,
+    created TEXT NOT NULL,
+    updated TEXT NOT NULL,
+    deleted TEXT,
+
+    FOREIGN KEY(podcast_id) REFERENCES podcast(id)
+);
+
+CREATE TABLE IF NOT EXISTS podcast_episode_audio (
+    media_id TEXT NOT NULL,
+    episode_id TEXT NOT NULL,
+
+    FOREIGN KEY(media_id) REFERENCES media(id)
+    FOREIGN KEY(episode_id) REFERENCES podcast_episodes(id)
+);
