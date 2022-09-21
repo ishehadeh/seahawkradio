@@ -26,11 +26,6 @@ CREATE TABLE IF NOT EXISTS media (
     deleted TEXT
 );
 
-CREATE TABLE IF NOT EXISTS category (
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS podcast (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
@@ -50,7 +45,7 @@ CREATE TABLE IF NOT EXISTS podcast (
 
 CREATE TABLE IF NOT EXISTS podcast_category (
     podcast_id TEXT NOT NULL,
-    category_id INTEGER NOT NULL
+    category TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS podcast_editors (
