@@ -14,7 +14,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class UploadController {
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);
-    private static FileStore STORE = new FileStore(Path.of("./uploads"));
+    private static final FileStore STORE = new FileStore(Path.of("./uploads"));
 
     private UploadController() {}
 
