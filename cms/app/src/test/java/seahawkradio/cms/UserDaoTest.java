@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Duration;
 
 public class UserDaoTest {
 
@@ -36,5 +37,15 @@ public class UserDaoTest {
         var users = new UserDao(DbUtil.openDatabase());
         var user = users.create("test1", "test1@example.com", "password1");
         assertEquals(users.login("test1@example.com", "password1").get(), user);
+    }
+
+    @Test
+    void userFromSession() throws IOException, SQLException {
+        final var db = DbUtil.openDatabase();
+        final var users = new UserDao(db);
+        final var sessions = new SessionDao(db);
+        final var user = users.create("test1", "test1@example.com", "password1");
+        final var session = sessions.create(user, Duration.ofDays(7));
+        assertEquals(users.fromSession(session.id()).get(), user);
     }
 }

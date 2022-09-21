@@ -1,3 +1,7 @@
+@import java.util.Optional
+@import seahawkradio.cms.User
+@param Optional<User> user
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr" itemscope itemtype="https://schema.org/WebPage" prefix="og:http://ogp.me/ns#">
 
@@ -25,12 +29,16 @@
     </header>
 
     <main>
+        @if (user.isEmpty())
         <h2>Login</h2>
         <form method="post" action="/login">
             <input type="text" name="username" placeholder="username" />
             <input type="text" name="password" placeholder="password" />
             <input type="submit" value="submit" />
         </form>
+        @else
+        <h2>Hello, ${user.get().username()}</h2>
+        @endif
 
         <h2>Upload Image</h2>
         <form method="post" action="/upload-image" enctype="multipart/form-data">

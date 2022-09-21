@@ -5,8 +5,10 @@ import io.javalin.http.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.time.Duration;
 import java.util.Optional;
+import java.util.UUID;
 
 // Container for User-related Handlers
 public class UserController {
@@ -14,6 +16,41 @@ public class UserController {
 
     // declare private constructor to remove implicit public constructor
     private UserController() {}
+
+    // Add a attribute "user" with the current authenticated user if a valid session cookie is
+    // present.
+    public static final Handler withUserMiddleware =
+            ctx -> {
+                final var users = new UserDao(ctx.appAttribute("database"));
+                final var sessionIdStr = ctx.cookie("session");
+                if (sessionIdStr == null) {
+                    LOG.atInfo().log("no session fond");
+                    return;
+                }
+
+                final var sessionId = UUID.fromString(sessionIdStr);
+                if (sessionId == null) {
+                    LOG.atInfo()
+                            .addKeyValue("session", sessionIdStr)
+                            .log("session cookie is not a valid UUID");
+                    return;
+                }
+
+                try {
+                    final var user = users.fromSession(sessionId);
+                    if (user.isEmpty()) {
+                        LOG.atInfo()
+                                .addKeyValue("session", sessionId)
+                                .log("invalid or expired session");
+                    }
+                    ctx.attribute("user", user);
+                } catch (SQLException e) {
+                    LOG.atError()
+                            .addKeyValue("session", sessionId)
+                            .setCause(e)
+                            .log("SQL Error when querying user by session ID");
+                }
+            };
 
     public static final Handler login =
             ctx -> {

@@ -98,4 +98,24 @@ public class UserDao {
             return Optional.of(user);
         }
     }
+
+    Optional<User> fromSession(UUID sessionId) throws SQLException {
+        final String query =
+                """
+            SELECT u.id, u.username, u.email, u.email_normalized, u.password, u.created, u.updated, u.deleted
+            FROM sessions
+            JOIN users AS u
+            ON u.id = sessions.user_id
+            WHERE datetime(sessions.expires) > datetime('now') AND sessions.id = ?
+            """;
+        try (var statement = this.conn.prepareStatement(query)) {
+            statement.setString(1, sessionId.toString());
+            var rows = statement.executeQuery();
+            if (!rows.next()) {
+                LOG.atInfo().addKeyValue("sessionId", sessionId).log("invalid or expired session");
+                return Optional.empty();
+            }
+            return Optional.of(userFromRow(rows));
+        }
+    }
 }

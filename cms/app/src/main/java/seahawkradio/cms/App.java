@@ -112,7 +112,8 @@ public class App {
                             ZonedDateTime.now())
                 };
         app.attribute("database", databaseConnection);
-        app.get("/", ctx -> ctx.render("index.jte"));
+        app.before("/", UserController.withUserMiddleware);
+        app.get("/", ctx -> ctx.render("index.jte", Map.of("user", ctx.attribute("user"))));
         app.get(
                 "/test.rss",
                 ctx ->
