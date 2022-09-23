@@ -36,7 +36,8 @@ public class FileStore {
 
     public Optional<InputStream> get(String id) throws IOException {
         final var file = storePath.resolve(id).toFile();
-        try (var fileStream = new FileInputStream(file)) {
+        try {
+            var fileStream = new FileInputStream(file);
             return Optional.of(fileStream);
         } catch (FileNotFoundException e) {
             return Optional.empty();
