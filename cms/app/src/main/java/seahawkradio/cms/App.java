@@ -87,8 +87,7 @@ public class App {
         try {
             new UserDao(databaseConnection).create("admin", "admin@example.com", "password123");
         } catch (SQLException e) {
-            LOG.error("failed to create admin user", e);
-            System.exit(1);
+            LOG.atError().setCause(e).log("failed to create admin user");
         }
         final PodcastMetadata podcast =
                 new PodcastMetadata(
