@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.LogManager;
 
 public class App {
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
@@ -33,6 +34,12 @@ public class App {
     public static void main(String[] args) {
         final String databaseURL = "jdbc:sqlite:";
 
+        try (var loggingPropertiesFile =
+                App.class.getResource("/logging.properties").openStream()) {
+            LogManager.getLogManager().readConfiguration(loggingPropertiesFile);
+        } catch (IOException e) {
+            LOG.atError().setCause(e).log("failed to load logging properties");
+        }
         LOG.info("initializing Seahawk Radio CSM");
 
         String schema = null;
