@@ -18,6 +18,27 @@ public class MediaDao {
         this.conn = conn;
     }
 
+    public Optional<Media> byId(UUID id) throws SQLException {
+        LOG.atDebug().addKeyValue("id", id).log("fetching media from database");
+        final var statementText =
+                "SELECT filename, content_type, created, deleted FROM media WHERE id = ?";
+        try (var statement = this.conn.prepareStatement(statementText)) {
+            statement.setString(1, id.toString());
+            final var rows = statement.executeQuery();
+            if (!rows.next()) {
+                return Optional.empty();
+            }
+
+            return Optional.of(
+                    new Media(
+                            id,
+                            rows.getString(1),
+                            rows.getString(2),
+                            OffsetDateTime.parse(rows.getString(3)),
+                            Optional.ofNullable(rows.getString(4)).map(OffsetDateTime::parse)));
+        }
+    }
+
     public Media create(String filename, String contentType) throws SQLException {
         final var media =
                 new Media(

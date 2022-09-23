@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.nio.file.Path;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
@@ -15,6 +17,20 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class UploadController {
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);
     private static final FileStore STORE = new FileStore(Path.of("./uploads"));
+    private static final ImageUploadConfig CONFIG =
+            new ImageUploadConfig(
+                    1024 * 1024 * 512,
+                    1920,
+                    1080,
+                    Set.of("image/jpeg", "image/png"),
+                    "http://localhost:8080/uploads/");
+
+    public record ImageUploadConfig(
+            long maxContentSize,
+            int maxWidth,
+            int maxHeight,
+            Set<String> allowedContentTypes,
+            String imageBaseURL) {}
 
     private UploadController() {}
 
@@ -51,6 +67,29 @@ public class UploadController {
                 ctx.status(200).result("success");
             };
 
+    public static final Handler getMediaEndpoint =
+            ctx -> {
+                final var media = new MediaDao(ctx.appAttribute("database"));
+
+                final var id = UUID.fromString(ctx.pathParam("id"));
+                LOG.atInfo().addKeyValue("id", id).log("media request");
+
+                final var mediaRecord = media.byId(id);
+                final var content = STORE.get(id.toString());
+                LOG.atInfo()
+                        .addKeyValue("id", id)
+                        .addKeyValue("media", mediaRecord)
+                        .log("found media record matching ID");
+                if (mediaRecord.isPresent() && content.isPresent()) {
+                    ctx.status(200)
+                            .contentType(mediaRecord.get().contentType())
+                            .result(content.get());
+                    return;
+                }
+
+                ctx.status(404).result("file not found");
+            };
+
     public static final Handler uploadImage =
             ctx -> {
                 final var media = new MediaDao(ctx.appAttribute("database"));
@@ -61,7 +100,6 @@ public class UploadController {
                     LOG.atWarn().setMessage("missing file in upload request").log();
                     return;
                 }
-
                 final var contentType = file.getContentType();
 
                 // TODO check content size

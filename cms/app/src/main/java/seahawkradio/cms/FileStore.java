@@ -35,6 +35,7 @@ public class FileStore {
     }
 
     public Optional<InputStream> get(String id) throws IOException {
+        LOG.atDebug().addKeyValue("id", id).log("retrieving blob");
         final var file = storePath.resolve(id).toFile();
         try {
             var fileStream = new FileInputStream(file);
