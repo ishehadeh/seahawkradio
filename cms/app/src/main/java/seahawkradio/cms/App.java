@@ -52,13 +52,20 @@ public class App {
             System.exit(1);
         }
 
+        boolean staticFromDisk = true;
+
         // Supress resource not closed lint
         // it isn't necessary to explicitly call close on Javalin apps.
         @SuppressWarnings("java:S2095")
         Javalin app =
                 Javalin.create(
                         config -> {
-                            config.addStaticFiles("static", Location.CLASSPATH);
+                            if (staticFromDisk) {
+                                config.addStaticFiles(
+                                        "src/main/resources/static", Location.EXTERNAL);
+                            } else {
+                                config.addStaticFiles("static", Location.CLASSPATH);
+                            }
                         });
 
         Connection databaseConnection = null;
@@ -127,6 +134,7 @@ public class App {
                                 .contentType("application/rss+xml"));
         app.post("/login", UserController.login);
         app.post("/upload-image", UploadController.uploadImage);
+        app.post("/api/image", UploadController.ckEditorImageEndpoint);
         app.post("/upload-audio", UploadController.uploadAudio);
         app.get("/media/{id}", UploadController.getMediaEndpoint);
         app.start(8080);
