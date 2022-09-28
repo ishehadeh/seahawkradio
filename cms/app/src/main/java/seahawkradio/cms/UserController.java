@@ -21,6 +21,10 @@ public class UserController {
     // present.
     public static final Handler withUserMiddleware =
             ctx -> {
+                // the attribute should always be set if this middleware is installed.
+                // default to an empty optional, meaning no valid session.
+                ctx.attribute("user", Optional.empty());
+
                 final var users = new UserDao(ctx.appAttribute("database"));
                 final var sessionIdStr = ctx.cookie("session");
                 if (sessionIdStr == null) {
