@@ -23,7 +23,7 @@ public class UploadController {
                     1920,
                     1080,
                     Set.of("image/jpeg", "image/png"),
-                    "http://localhost:8080/uploads/");
+                    "http://localhost:8080/media/");
 
     public record ImageUploadConfig(
             long maxContentSize,
@@ -90,6 +90,77 @@ public class UploadController {
                 ctx.status(404).result("file not found");
             };
 
+    public record CKEditorErrorResponse(String error) {}
+
+    public record CKEditorImageResponse(String url) {}
+
+    // endpoint for CKEditor 5 SimpleUploadAdapter
+    // see:
+    // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/simple-upload-adapter.html
+    public static final Handler ckEditorImageEndpoint =
+            ctx -> {
+                final var media = new MediaDao(ctx.appAttribute("database"));
+
+                final var file = ctx.uploadedFiles().get(0);
+                if (file == null) {
+                    ctx.status(415).result("unsupported media type");
+                    LOG.atWarn().setMessage("missing file in upload request").log();
+                    return;
+                }
+                final var contentType = file.getContentType();
+
+                if (contentType == null || !CONFIG.allowedContentTypes().contains(contentType)) {
+                    ctx.status(415).json(new CKEditorErrorResponse("unsupported media type"));
+                    LOG.atWarn()
+                            .setMessage("content type not in allow-list")
+                            .addKeyValue("Content-Type", contentType)
+                            .addKeyValue(
+                                    "allowedContentTypes",
+                                    String.join(", ", CONFIG.allowedContentTypes()))
+                            .log();
+                    return;
+                }
+
+                final var contentSize = file.getSize();
+                if (contentSize > CONFIG.maxContentSize()) {
+                    ctx.status(413).json(new CKEditorErrorResponse("payload to large"));
+                    LOG.atWarn()
+                            .setMessage("max content size exceeded")
+                            .addKeyValue("contentSize", contentSize)
+                            .addKeyValue("maxContentSize", CONFIG.maxContentSize())
+                            .log();
+                    return;
+                }
+
+                // validate the image
+                var readers = ImageIO.getImageReadersByMIMEType(contentType);
+                if (!readers.hasNext()) {
+                    ctx.status(415).json(new CKEditorErrorResponse("unsupported media type"));
+                    LOG.atError()
+                            .setMessage("Content-Type in allow list, but not supported by ImageIO")
+                            .addKeyValue("Content-Type", contentType)
+                            .log();
+                    return;
+                }
+                var reader = readers.next();
+                var imgContent = file.getContent().readAllBytes();
+                reader.setInput(
+                        ImageIO.createImageInputStream(new ByteArrayInputStream(imgContent)),
+                        true,
+                        true);
+                var img = reader.read(0); // why 0?
+
+                final var mediaRecord = media.create("", contentType);
+                var key =
+                        STORE.put(
+                                mediaRecord.id().toString(), new ByteArrayInputStream(imgContent));
+                LOG.atInfo().setMessage("uploaded image").addKeyValue("key", key).log();
+                ctx.status(200)
+                        .json(
+                                new CKEditorImageResponse(
+                                        CONFIG.imageBaseURL + mediaRecord.id().toString()));
+                return;
+            };
     public static final Handler uploadImage =
             ctx -> {
                 final var media = new MediaDao(ctx.appAttribute("database"));

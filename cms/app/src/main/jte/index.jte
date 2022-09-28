@@ -17,9 +17,11 @@
 
     <link rel="preload" href="/main.css" as="style" />
     <link rel="stylesheet" href="/main.css" />
+
+    <script src="/editor.js"></script>
 </head>
 
-<body>
+<body onload="Editor.initEditor(document.getElementById('editor'))">
     <header>
         <h1>Seahawk Radio</h1>
         <nav>
@@ -51,6 +53,11 @@
             <input type="file" name="audio" multiple />
             <input type="submit" value="submit" />
         </form>
+
+        <div>
+            <h2>Podcast</h2>
+            <div id="editor"></div>
+        </div>
     </main>
 
     <footer></footer>

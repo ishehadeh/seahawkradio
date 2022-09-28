@@ -1,5 +1,7 @@
 # Ignore Gradle project-specific cache directory
 .gradle
+node_modules/
+dist/
 
 # Ignore Gradle build output directory
 build
@@ -12,3 +14,6 @@ app/bin
 # Application Database
 app/seahawkradio-cms.db
 app/uploads
+
+# Generated files
+app/src/main/resources/static/editor.js*

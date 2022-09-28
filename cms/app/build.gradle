@@ -29,6 +29,9 @@ dependencies {
     // Web Framework
     implementation group: 'io.javalin', name: 'javalin', version: '4.6.4'
 
+    // Required by javalin for JSON parsing
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
+
     // Template Engine
     implementation group: 'gg.jte', name: 'jte', version: '2.1.2'
 
