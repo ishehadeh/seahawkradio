@@ -1,5 +1,8 @@
 @import java.util.Optional
 @import seahawkradio.cms.User
+@import seahawkradio.cms.Language
+@import seahawkradio.cms.ApplePodcastCategory
+
 @param Optional<User> user
 
 <!DOCTYPE html>
@@ -21,7 +24,7 @@
     <script src="/editor.js"></script>
 </head>
 
-<body onload="Editor.initEditor(document.getElementById('editor'))">
+<body onload="Editor.makePodcastEditor(document.getElementById('editor'))">
     <header>
         <h1>Seahawk Radio</h1>
         <nav>
@@ -56,6 +59,55 @@
 
         <div>
             <h2>Podcast</h2>
+            <form action="/podcast" method="post">
+                <fieldset>
+                    <label for="podcast-title">Title</label>
+                    <input type="text" id="podcast-title" name="title"/>
+
+                    <label for="podcast-copyright">Copyright</label>
+                    <input type="text" id="podcast-copyright" name="copyright"/>
+
+                    <label for="podcast-language">Language</label>
+                    <select id="podcast-language" name="language">
+                        @for(var lang : Language.ALL)
+                            @if (lang.alpha2().isPresent())
+                                <option value="${lang.alpha2().get()}">${lang.name()}</option>
+                            @endif
+                        @endfor
+                    </select>
+
+                    <fieldset class="category-selector">
+                        <legend>Category</legend>
+                        @for(var category : ApplePodcastCategory.ALL)
+                            !{var categoryId = "category-" + category.name().replaceAll("[\\W]+", "");}
+
+                            <details>
+                                <summary>
+                                    <input type="checkbox" name="categories[]" id="${categoryId}" />
+                                    <label for="category-${category.name()}">${category.name()}</label>
+                                </summary>
+                                <ul>
+                                    @for(var subcategory : category.subcategories())
+                                        !{var subcategoryId = categoryId + "-" + subcategory.replaceAll("[\\W]+", "");}
+                                        <li>
+                                            <input type="checkbox" name="${categoryId}-subcategories[]" id="${subcategoryId}" />
+                                            <label for="${subcategoryId}">${subcategory}</label>
+                                        </li>
+                                    @endfor
+                                </ul>
+                            </details>
+                        @endfor
+                    </fieldset>
+                    <label for="podcast-explicit">Explicit</label>
+                    <input type="checkbox" id="podcast-explicit" name="explicit" />
+
+                    <textarea name="description" id="editor">
+                        Podcast description...
+                    </textarea>
+
+                    <input type="submit" value="Create" />
+                </fieldset>
+            </form>
             <div id="editor"></div>
         </div>
     </main>

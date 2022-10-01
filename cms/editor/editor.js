@@ -47,3 +47,40 @@ export function initEditor(elem) {
         });
 
 }
+
+// Init an editor for podcast descriptions
+// it only supports the most commen set of allowed elements by podcast players.
+// See:
+//    - https://support.spotifyforpodcasters.com/hc/en-us/articles/360044283811-HTML-formatting-in-podcast-descriptions
+export function makePodcastEditor(elem) {
+    ClassicEditor
+        .create(elem, {
+            plugins: [Heading, Essentials, Paragraph, ListProperties, Link, Bold, Italic, Image, ImageResize, ImageResizeHandles, ImageUpload, PasteFromOffice, SimpleUploadAdapter, SourceEditing],
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'bold', 'italic', '|',
+                    'outdent', 'indent', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'link', 'uploadImage', '|',
+                    'undo', 'redo', '|',
+                    'sourceEditing',
+                ],
+                shouldNotGroupWhenFull: true
+            },
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3' }
+                ]
+            },
+            simpleUpload: {
+                uploadUrl: 'http://localhost:8080/api/image',
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
