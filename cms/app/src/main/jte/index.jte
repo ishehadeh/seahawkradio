@@ -83,14 +83,14 @@
 
                             <details>
                                 <summary>
-                                    <input type="checkbox" name="categories[]" id="${categoryId}" />
+                                    <input type="checkbox" name="categories[]" id="${categoryId}" value="${category.name()}" />
                                     <label for="category-${category.name()}">${category.name()}</label>
                                 </summary>
                                 <ul>
                                     @for(var subcategory : category.subcategories())
                                         !{var subcategoryId = categoryId + "-" + subcategory.replaceAll("[\\W]+", "");}
                                         <li>
-                                            <input type="checkbox" name="${categoryId}-subcategories[]" id="${subcategoryId}" />
+                                            <input type="checkbox" name="categories[]" id="${subcategoryId}" value="${category.name()}::${subcategory}" />
                                             <label for="${subcategoryId}">${subcategory}</label>
                                         </li>
                                     @endfor
