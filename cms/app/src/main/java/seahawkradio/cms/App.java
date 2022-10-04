@@ -135,6 +135,7 @@ public class App {
         app.post("/login", UserController.login);
         app.post("/upload-image", UploadController.uploadImage);
         app.post("/api/image", UploadController.ckEditorImageEndpoint);
+        app.post("/podcast", PodcastController.createPodcastEndpoint);
         app.post("/upload-audio", UploadController.uploadAudio);
         app.get("/media/{id}", UploadController.getMediaEndpoint);
         app.start(8080);
