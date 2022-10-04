@@ -71,7 +71,7 @@
                     <select id="podcast-language" name="language">
                         @for(var lang : Language.ALL)
                             @if (lang.alpha2().isPresent())
-                                <option value="${lang.alpha2().get()}">${lang.name()}</option>
+                                <option value="${lang.alpha2().get()}" selected="${lang.alpha3() == "eng"}">${lang.name()}</option>
                             @endif
                         @endfor
                     </select>
