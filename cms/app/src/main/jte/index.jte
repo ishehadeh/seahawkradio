@@ -76,6 +76,25 @@
                         @endfor
                     </select>
 
+                    <fieldset class="category-selector-datalist">
+                        <legend>Category</legend>
+
+                        <label for="podcast-category-primary">Primary: </label>
+                        <input id="podcast-category-primary" list="podcast-category-list" name="category-primary" />
+
+                        <label for="podcast-category-secondary">Secondary: </label>
+                        <input id="podcast-category-secondary" list="podcast-category-list" name="category-secondary" />
+
+                        <datalist id="podcast-category-list">
+                            @for(var category : ApplePodcastCategory.ALL)
+                                <option>${category.name()}</option>
+                                @for(var subcategory : category.subcategories())
+                                    <option>${category.name()}: ${subcategory}</option>
+                                @endfor
+                            @endfor
+                        </datalist>
+                    </fieldset>
+
                     <fieldset class="category-selector">
                         <legend>Category</legend>
                         @for(var category : ApplePodcastCategory.ALL)
