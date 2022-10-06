@@ -44,6 +44,11 @@ dependencies {
     // Password Hashing
     // argon2-jvm packages Argon2 binaries, to disable this use argon2-jvm-nolibs
     implementation 'de.mkammerer:argon2-jvm:2.11'
+
+    // HTML Sanatizer
+    // Helps us limit what users submit in rich-text fields.
+    implementation 'com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20220608.1'
+
 }
 
 application {
