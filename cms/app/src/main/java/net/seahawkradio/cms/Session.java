@@ -1,4 +1,4 @@
-package seahawkradio.cms;
+package net.seahawkradio.cms;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

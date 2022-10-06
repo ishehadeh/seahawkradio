@@ -1,4 +1,4 @@
-package seahawkradio.cms;
+package net.seahawkradio.cms;
 
 import io.javalin.core.validation.JavalinValidation;
 import io.javalin.http.Handler;

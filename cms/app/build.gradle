@@ -53,7 +53,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'seahawkradio.cms.App'
+    mainClass = 'net.seahawkradio.cms.App'
 }
 
 tasks.named('test') {

@@ -1,4 +1,4 @@
-package seahawkradio.cms;
+package net.seahawkradio.cms;
 
 import static org.junit.jupiter.api.Assertions.*;
 
