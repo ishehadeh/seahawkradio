@@ -5,6 +5,7 @@ package net.seahawkradio.cms;
 
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
+import io.javalin.rendering.template.JavalinJte;
 
 import net.seahawkradio.cms.PodcastEpisode.Enclosure;
 
@@ -54,6 +55,8 @@ public class App {
 
         boolean staticFromDisk = true;
 
+        JavalinJte.init();
+
         // Supress resource not closed lint
         // it isn't necessary to explicitly call close on Javalin apps.
         @SuppressWarnings("java:S2095")
@@ -61,10 +64,10 @@ public class App {
                 Javalin.create(
                         config -> {
                             if (staticFromDisk) {
-                                config.addStaticFiles(
+                                config.staticFiles.add(
                                         "src/main/resources/static", Location.EXTERNAL);
                             } else {
-                                config.addStaticFiles("static", Location.CLASSPATH);
+                                config.staticFiles.add("static", Location.CLASSPATH);
                             }
                         });
 

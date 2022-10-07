@@ -27,13 +27,15 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
     // Web Framework
-    implementation group: 'io.javalin', name: 'javalin', version: '4.6.4'
+    implementation group: 'io.javalin', name: 'javalin', version: '5.0.1'
+    implementation group: 'io.javalin', name: 'javalin-rendering', version: '5.0.1'
 
     // Required by javalin for JSON parsing
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
 
     // Template Engine
-    implementation group: 'gg.jte', name: 'jte', version: '2.1.2'
+    implementation group: 'gg.jte', name: 'jte', version: '2.2.1'
+    implementation group: 'gg.jte', name: 'jte-kotlin', version: '1.12.0'
 
     // Logging
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0'

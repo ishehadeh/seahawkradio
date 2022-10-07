@@ -46,8 +46,8 @@ public class UploadController {
                 }
 
                 // TODO check content size
-                final var contentType = file.getContentType();
-                final var audioContent = file.getContent().readAllBytes();
+                final var contentType = file.contentType();
+                final var audioContent = file.content().readAllBytes();
                 try {
                     final var audioStream =
                             AudioSystem.getAudioInputStream(new ByteArrayInputStream(audioContent));
@@ -58,7 +58,7 @@ public class UploadController {
                 }
                 // TODO verify stream?
 
-                final var mediaRecord = media.create(file.getFilename(), contentType);
+                final var mediaRecord = media.create(file.filename(), contentType);
                 var key =
                         STORE.put(
                                 mediaRecord.id().toString(),
@@ -107,7 +107,7 @@ public class UploadController {
                     LOG.atWarn().setMessage("missing file in upload request").log();
                     return;
                 }
-                final var contentType = file.getContentType();
+                final var contentType = file.contentType();
 
                 if (contentType == null || !CONFIG.allowedContentTypes().contains(contentType)) {
                     ctx.status(415).json(new CKEditorErrorResponse("unsupported media type"));
@@ -121,7 +121,7 @@ public class UploadController {
                     return;
                 }
 
-                final var contentSize = file.getSize();
+                final var contentSize = file.size();
                 if (contentSize > CONFIG.maxContentSize()) {
                     ctx.status(413).json(new CKEditorErrorResponse("payload to large"));
                     LOG.atWarn()
@@ -143,7 +143,7 @@ public class UploadController {
                     return;
                 }
                 var reader = readers.next();
-                var imgContent = file.getContent().readAllBytes();
+                var imgContent = file.content().readAllBytes();
                 reader.setInput(
                         ImageIO.createImageInputStream(new ByteArrayInputStream(imgContent)),
                         true,
@@ -171,7 +171,7 @@ public class UploadController {
                     LOG.atWarn().setMessage("missing file in upload request").log();
                     return;
                 }
-                final var contentType = file.getContentType();
+                final var contentType = file.contentType();
 
                 // TODO check content size
                 // validate the image
@@ -184,14 +184,14 @@ public class UploadController {
                             .log();
                 }
                 var reader = readers.next();
-                var imgContent = file.getContent().readAllBytes();
+                var imgContent = file.content().readAllBytes();
                 reader.setInput(
                         ImageIO.createImageInputStream(new ByteArrayInputStream(imgContent)),
                         true,
                         true);
                 var img = reader.read(0); // why 0?
 
-                final var mediaRecord = media.create(file.getFilename(), contentType);
+                final var mediaRecord = media.create(file.filename(), contentType);
                 var key =
                         STORE.put(
                                 mediaRecord.id().toString(), new ByteArrayInputStream(imgContent));

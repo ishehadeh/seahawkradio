@@ -1,7 +1,7 @@
 package net.seahawkradio.cms;
 
-import io.javalin.core.validation.JavalinValidation;
 import io.javalin.http.Handler;
+import io.javalin.validation.JavalinValidation;
 
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
