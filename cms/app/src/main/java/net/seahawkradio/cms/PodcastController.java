@@ -15,9 +15,9 @@ public class PodcastController {
                     .allowElements("a", "h1", "h2", "h3", "ul", "ol", "li")
                     .toFactory();
 
-    private static final Boolean validateLanguage(String alpha2_in) {
+    private static final Boolean validateLanguage(String alpha2In) {
         for (var lang : Language.ALL) {
-            if (lang.alpha2().isPresent() && lang.alpha2().get().contentEquals(alpha2_in)) {
+            if (lang.alpha2().isPresent() && lang.alpha2().get().contentEquals(alpha2In)) {
                 return true;
             }
         }
