@@ -1,6 +1,7 @@
-package net.seahawkradio.cms;
+package net.seahawkradio.cms.controllers;
 
 import io.javalin.http.Handler;
+import net.seahawkradio.cms.FileStore;
 import net.seahawkradio.cms.dao.MediaDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
