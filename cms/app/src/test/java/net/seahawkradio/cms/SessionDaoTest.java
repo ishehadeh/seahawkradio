@@ -3,7 +3,8 @@ package net.seahawkradio.cms;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-
+import net.seahawkradio.cms.dao.SessionDao;
+import net.seahawkradio.cms.dao.UserDao;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;

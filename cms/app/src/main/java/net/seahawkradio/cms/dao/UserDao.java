@@ -1,4 +1,4 @@
-package net.seahawkradio.cms;
+package net.seahawkradio.cms.dao;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -23,12 +23,12 @@ public class UserDao {
             Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2i, 32, 64);
     Connection conn;
 
-    UserDao(Connection conn) {
+    public UserDao(Connection conn) {
         this.conn = conn;
     }
 
     // Get User from a query result row. Row must be id, username, email, email_normalized, password
-    protected static User userFromRow(ResultSet row) throws SQLException {
+    public static User userFromRow(ResultSet row) throws SQLException {
         return new User(
                 UUID.fromString(row.getString(1)),
                 row.getString(2),
@@ -48,7 +48,7 @@ public class UserDao {
         return email.toLowerCase();
     }
 
-    User create(String username, String email, String password) throws SQLException {
+    public User create(String username, String email, String password) throws SQLException {
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
         final String hashedPassword = argon2.hash(22, 65536, 1, utf8Password);
         final OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
@@ -79,7 +79,7 @@ public class UserDao {
         return user;
     }
 
-    Optional<User> login(String email, String password) throws SQLException {
+    public Optional<User> login(String email, String password) throws SQLException {
         final byte[] utf8Password = password.getBytes(StandardCharsets.UTF_8);
         final String query =
                 "SELECT id, username, email, email_normalized, password, created, updated, deleted"
@@ -101,7 +101,7 @@ public class UserDao {
         }
     }
 
-    Optional<User> fromSession(UUID sessionId) throws SQLException {
+    public Optional<User> fromSession(UUID sessionId) throws SQLException {
         final String query =
                 """
             SELECT u.id, u.username, u.email, u.email_normalized, u.password, u.created, u.updated, u.deleted

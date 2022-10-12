@@ -1,4 +1,4 @@
-package net.seahawkradio.cms;
+package net.seahawkradio.cms.dao;
 
 import net.seahawkradio.cms.models.Media;
 
@@ -16,7 +16,7 @@ public class MediaDao {
     private static final Logger LOG = LoggerFactory.getLogger(MediaDao.class);
     Connection conn;
 
-    MediaDao(Connection conn) {
+    public MediaDao(Connection conn) {
         this.conn = conn;
     }
 

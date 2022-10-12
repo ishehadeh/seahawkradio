@@ -1,4 +1,4 @@
-package net.seahawkradio.cms;
+package net.seahawkradio.cms.dao;
 
 import net.seahawkradio.cms.models.Session;
 import net.seahawkradio.cms.models.User;
@@ -25,7 +25,7 @@ public class SessionDao {
     }
 
     // Get Session from a query result row. Row must be id, user_id, created, expires
-    protected static Session sessionFromRow(ResultSet row) throws SQLException {
+    public static Session sessionFromRow(ResultSet row) throws SQLException {
         return new Session(
                 UUID.fromString(row.getString(1)),
                 UUID.fromString(row.getString(2)),

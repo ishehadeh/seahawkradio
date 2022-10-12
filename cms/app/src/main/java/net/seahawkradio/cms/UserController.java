@@ -1,7 +1,8 @@
 package net.seahawkradio.cms;
 
 import io.javalin.http.Handler;
-
+import net.seahawkradio.cms.dao.SessionDao;
+import net.seahawkradio.cms.dao.UserDao;
 import net.seahawkradio.cms.models.User;
 
 import org.slf4j.Logger;
