@@ -1,5 +1,7 @@
 package net.seahawkradio.cms;
 
+import net.seahawkradio.cms.models.Media;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

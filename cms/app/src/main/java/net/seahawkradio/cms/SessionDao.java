@@ -1,5 +1,8 @@
 package net.seahawkradio.cms;
 
+import net.seahawkradio.cms.models.Session;
+import net.seahawkradio.cms.models.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

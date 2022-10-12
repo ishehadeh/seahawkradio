@@ -3,6 +3,8 @@ package net.seahawkradio.cms;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
+import net.seahawkradio.cms.models.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

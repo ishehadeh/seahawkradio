@@ -3,6 +3,8 @@ package net.seahawkradio.cms;
 import io.javalin.http.Handler;
 import io.javalin.validation.JavalinValidation;
 
+import net.seahawkradio.cms.models.Language;
+
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 import org.slf4j.Logger;

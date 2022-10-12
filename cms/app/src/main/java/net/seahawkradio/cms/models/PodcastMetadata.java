@@ -1,4 +1,4 @@
-package net.seahawkradio.cms;
+package net.seahawkradio.cms.models;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
