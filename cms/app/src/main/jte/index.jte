@@ -1,7 +1,7 @@
 @import java.util.Optional
-@import net.seahawkradio.cms.User
-@import net.seahawkradio.cms.Language
-@import net.seahawkradio.cms.ApplePodcastCategory
+@import net.seahawkradio.cms.models.User
+@import net.seahawkradio.cms.models.Language
+@import net.seahawkradio.cms.models.ApplePodcastCategory
 
 @param Optional<User> user
 

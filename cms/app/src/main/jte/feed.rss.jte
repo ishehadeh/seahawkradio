@@ -1,6 +1,6 @@
 @import java.time.format.DateTimeFormatter
-@import net.seahawkradio.cms.PodcastMetadata
-@import net.seahawkradio.cms.PodcastEpisode
+@import net.seahawkradio.cms.models.PodcastMetadata
+@import net.seahawkradio.cms.models.PodcastEpisode
 @param PodcastMetadata podcast
 @param PodcastEpisode[] episodes
 
