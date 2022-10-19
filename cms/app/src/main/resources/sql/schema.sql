@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS podcast (
     link TEXT NOT NULL,
     description TEXT NOT NULL,
     copyright TEXT NOT NULL,
-    pub_date TEXT NOT NULL,
+    pub_date TEXT,
     language TEXT NOT NULL,
     explicit INTEGER NOT NULL,
     author TEXT NOT NULL,

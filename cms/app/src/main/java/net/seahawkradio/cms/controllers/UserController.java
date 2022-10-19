@@ -1,6 +1,7 @@
 package net.seahawkradio.cms.controllers;
 
 import io.javalin.http.Handler;
+
 import net.seahawkradio.cms.dao.SessionDao;
 import net.seahawkradio.cms.dao.UserDao;
 import net.seahawkradio.cms.models.User;

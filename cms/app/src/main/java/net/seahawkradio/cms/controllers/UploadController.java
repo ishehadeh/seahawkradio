@@ -1,8 +1,10 @@
 package net.seahawkradio.cms.controllers;
 
 import io.javalin.http.Handler;
+
 import net.seahawkradio.cms.FileStore;
 import net.seahawkradio.cms.dao.MediaDao;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +16,6 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-
-import net.seahawkradio.cms.dao.UserDao;
 
 public class UploadController {
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);

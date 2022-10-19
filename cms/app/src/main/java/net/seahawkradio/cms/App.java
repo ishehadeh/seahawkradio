@@ -6,6 +6,7 @@ package net.seahawkradio.cms;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinJte;
+
 import net.seahawkradio.cms.controllers.PodcastController;
 import net.seahawkradio.cms.controllers.UploadController;
 import net.seahawkradio.cms.controllers.UserController;
@@ -24,9 +25,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.LogManager;
@@ -112,12 +115,15 @@ public class App {
                         "http://localhost:8080/test",
                         "Test podcast feed.",
                         "Example Copyright",
-                        ZonedDateTime.now(),
+                        Optional.of(ZonedDateTime.now()),
                         "en-us",
                         false,
                         Set.of("Film Reviews", "Fantasy Sports"),
                         "Seahawk Radio",
-                        new Identity("admin@example.com", "The Admin"));
+                        new Identity("admin@example.com", "The Admin"),
+                        OffsetDateTime.now(),
+                        OffsetDateTime.now(),
+                        Optional.empty());
         final PodcastEpisode[] eps =
                 new PodcastEpisode[] {
                     new PodcastEpisode(

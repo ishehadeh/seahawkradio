@@ -76,6 +76,12 @@
                         @endfor
                     </select>
 
+                    <label for="podcast-author">Author: </label>
+                    <input id="podcast-author" name="author" />
+
+                    <label for="podcast-author">Author: </label>
+                    <input id="podcast-author" name="author" />
+
                     <fieldset class="category-selector-datalist">
                         <legend>Category</legend>
 
